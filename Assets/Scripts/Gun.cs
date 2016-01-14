@@ -5,11 +5,20 @@ public class Gun : MonoBehaviour {
     /*WILLS COMMENTS
         For public GameObject bullet is this calling the actual object in Unity by name. If this is
         the case I have to name it bulletV1 I think. 
+
+	http://docs.unity3d.com/ScriptReference/GameObject.html
+	Look at Find ir FindGameObjectsWithTag or FindWithTag
+
+	In this case, when you want a bullet, you will want to generate it from a prefab
+	http://docs.unity3d.com/Manual/InstantiatingPrefabs.html
+
+	
     */
     public GameObject bullet;
     public int delayTime = 8;
 
     private float counter = 0;
+	private float timeSinceFired = 0;
 
     // enums allow you to have a list of values associated with a data type.
     // In this case, I've created an enum called GunState, which can have the values of Idle or Firing.
@@ -19,6 +28,14 @@ public class Gun : MonoBehaviour {
     What I can see is there are two states and Firing is being left alone for now. How do I test for
     Gunstate.Idle ? Thinking I should plugin a console.log when right mouse clicks in the GunState.Idle method.
     I think that Idle is 0, and Firing is 1 like how an array works? Will keep trouble shooting.
+
+	The switch in update is testing for GunState.Idle. Another means is just
+
+	if (state == GunState.Idle)
+	{
+	}
+
+	Your gun is not working because of your counter/delayTime mechanism. Remove it for now. Don't worry about the delay.
     */
     enum GunState {
 		Idle,
@@ -40,6 +57,9 @@ public class Gun : MonoBehaviour {
 		switch (state) {
 		case GunState.Idle:
                 // Your shoot code would go here, but you will need to make adjustments for this to work better
+
+				// First remove && counter > delayTime and run and see what happens
+				// Next Try using Input.GetMouseButtonDown instead and see what happens
                 if (Input.GetKey(KeyCode.Mouse0) && counter > delayTime)
                 {
                     Instantiate(bullet, transform.position, transform.rotation);
@@ -48,11 +68,28 @@ public class Gun : MonoBehaviour {
                     I followed this from a tutorial. I thought I called the counter in if statement with counter > 
                     delayTime operated the Instantiate code in the block. Just confused not sure if this makes sense
                     to you.
+
+					You are not ever incrementing counter. You should also try and use real time, not this. For example, if you were 
+					incrementing counter. When counter becomes 1, it is not 1 second, rather it will be a few milliseconds. You have to ask what the deltaTime si
+					
                     */
                     counter = 0;
+					timeSinceFired = 0;
+
+					// NOte you have the change the state
+					state = GunState.Firing;
                 }
                 break;
 		case GunState.Firing:
+			timeSinceFired += Time.deltaTime;
+
+			// Now you have to decide when you want to leave the Firing state and then what is the next state.
+			// What you need to do is make what they call a state diagram and make what you think the state diagram is for the gun
+			// It is probably something like Idle -> Firing -> Fire -> ??? where ??? depends on the type of gun. This is a simplification
+			// Another state transition to think about is Idle -> Firing -> ????? where ????? can be Jam or empty
+
+			// I am making it go back to Idle for now, but this is wrong. This is just so you will be able fire rapidly when you remove the && counter > delayTime above
+			state = GunState.Idle;
 			break;
 		default:
 			// This should never happen right now
