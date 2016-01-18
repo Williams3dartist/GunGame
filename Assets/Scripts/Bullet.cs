@@ -33,12 +33,13 @@ public class Bullet : MonoBehaviour {
 		// Second, you would normally apply some math to calculate the correct distance travelled against delta time
 		// Also, this only works because the barrell is going dwon the Z axis. In reality, you'd have a vectory for the speed/delta
 		// that way it accounts for the actually X, Y, Z rotation if the gun was pointed in a different direction.
-		transform.Translate (0,0,speed);
+		
 	}
 
 	void FixedUpdate()
 	{
-		// Note that despite what the video says, you typically still use delta time. This is because even though FixedUpdate is supposed
-		// to be a fixed amount of time, it is possible the numbers are slightly off.
-	}
+        // Note that despite what the video says, you typically still use delta time. This is because even though FixedUpdate is supposed
+        // to be a fixed amount of time, it is possible the numbers are slightly off.
+        transform.Translate(0, 0, speed*Time.deltaTime);
+    }
 }

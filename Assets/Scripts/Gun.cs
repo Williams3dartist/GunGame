@@ -15,9 +15,6 @@ public class Gun : MonoBehaviour {
 	
     */
     public GameObject bullet;
-    public int delayTime = 8;
-
-    private float counter = 0;
 	private float timeSinceFired = 0;
 
     // enums allow you to have a list of values associated with a data type.
@@ -60,7 +57,7 @@ public class Gun : MonoBehaviour {
 
 				// First remove && counter > delayTime and run and see what happens
 				// Next Try using Input.GetMouseButtonDown instead and see what happens
-                if (Input.GetKey(KeyCode.Mouse0) && counter > delayTime)
+                if (Input.GetMouseButtonDown(KeyCode.Mouse0))
                 {
                     Instantiate(bullet, transform.position, transform.rotation);
                     /*WILLS COMMENTS 
@@ -72,9 +69,14 @@ public class Gun : MonoBehaviour {
 					You are not ever incrementing counter. You should also try and use real time, not this. For example, if you were 
 					incrementing counter. When counter becomes 1, it is not 1 second, rather it will be a few milliseconds. You have to ask what the deltaTime si
 					
+                    WILLS COMMENT2
+                    I think you are missing some notes exactly 3 lines above. Also I did what you said but error is still looking
+                    for counter. I deleted both. Other error in Debug Log Severity	Code	Description	Project	File	Line
+                    Error	CS1503	Argument 1: cannot convert from 'UnityEngine.KeyCode' to 'int'. Not sure.	
                     */
-                    counter = 0;
-					timeSinceFired = 0;
+                    timeSinceFired = 0;
+
+                    
 
 					// NOte you have the change the state
 					state = GunState.Firing;
